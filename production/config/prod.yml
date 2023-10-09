@@ -72,7 +72,7 @@ services:
                     # if devices and deployments will access storage
                     # using https://s3.acme.org, then
                     # set this to s3.acme.org
-                    - set-my-alias-here.com
+                    - mender-s.ionmobility.com
         command:
             - --accesslog=true
             - --entrypoints.http.address=:80
@@ -95,7 +95,7 @@ services:
                 max-size: "50m"
         environment:
             # ALLOWED_HOSTS is a comma-separated list of allowed hostnames
-            ALLOWED_HOSTS: "my-gateway-dns-name"
+            ALLOWED_HOSTS: "mender-s.ionmobility.com"
 
     mender-deployments:
         command: server --automigrate
@@ -104,15 +104,15 @@ services:
         environment:
             STORAGE_BACKEND_CERT: /etc/ssl/certs/docker.mender.io.crt
             # access key, the same value as MINIO_ACCESS_KEY
-            DEPLOYMENTS_AWS_AUTH_KEY:
+            DEPLOYMENTS_AWS_AUTH_KEY: mender-deployments
             # secret, the same valie as MINIO_SECRET_KEY
-            DEPLOYMENTS_AWS_AUTH_SECRET:
+            DEPLOYMENTS_AWS_AUTH_SECRET: Pee4TiF6thah7een
 
             # deployments service uses signed URLs, hence it needs to access
             # storage-proxy using exactly the same name as devices will; if
             # devices will access storage using https://s3.acme.org, then
             # set this to https://s3.acme.org
-            DEPLOYMENTS_AWS_EXTERNAL_URI: https://set-my-alias-here.com
+            DEPLOYMENTS_AWS_EXTERNAL_URI: https://mender-s.ionmobility.com
             DEPLOYMENTS_AWS_URI: http://minio:9000
         logging:
             options:
@@ -122,9 +122,9 @@ services:
     minio:
         environment:
             # access key
-            MINIO_ACCESS_KEY:
+            MINIO_ACCESS_KEY: mender-deployments
             # secret
-            MINIO_SECRET_KEY:
+            MINIO_SECRET_KEY: Pee4TiF6thah7een
         volumes:
             # mounts a docker volume named `mender-artifacts` as /export directory
             - mender-artifacts:/export:rw
